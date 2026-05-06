@@ -6,23 +6,115 @@ search:
     - "senior data engineer"
     - "lead data engineer"
     - "staff data engineer"
+    - "principal data engineer"
     - "analytics engineer"
     - "etl engineer"
     - "data platform engineer"
+    - "data infrastructure engineer"
 
+  # US only — onsite, hybrid, AND remote-US all welcome.
+  # Filter accepts the job if its location string contains ANY of these.
   locations:
-    - "remote"
     - "United States"
+    - "USA"
+    - "U.S."
+    - "U.S "
+    - " US"
+    - "US,"
+    - "Remote, US"
+    - "Remote - US"
+    - "Remote - United States"
+    - "Remote (US)"
+    - "Remote US"
+    - "US Remote"
+    - "US-Remote"
+    - "Anywhere in the US"
+    - "Anywhere - US"
+    - "Alabama"
+    - "Alaska"
+    - "Arizona"
+    - "Arkansas"
+    - "California"
+    - "Colorado"
+    - "Connecticut"
+    - "Delaware"
+    - "Florida"
+    - "Georgia"
+    - "Hawaii"
+    - "Idaho"
+    - "Illinois"
+    - "Indiana"
+    - "Iowa"
+    - "Kansas"
+    - "Kentucky"
+    - "Louisiana"
+    - "Maine"
+    - "Maryland"
+    - "Massachusetts"
+    - "Michigan"
+    - "Minnesota"
+    - "Mississippi"
+    - "Missouri"
+    - "Montana"
+    - "Nebraska"
+    - "Nevada"
+    - "New Hampshire"
+    - "New Jersey"
+    - "New Mexico"
+    - "New York"
+    - "North Carolina"
+    - "North Dakota"
+    - "Ohio"
+    - "Oklahoma"
+    - "Oregon"
+    - "Pennsylvania"
+    - "Rhode Island"
+    - "South Carolina"
+    - "South Dakota"
+    - "Tennessee"
     - "Texas"
-    - "Dallas"
+    - "Utah"
+    - "Vermont"
+    - "Virginia"
+    - "Washington"
+    - "West Virginia"
+    - "Wisconsin"
+    - "Wyoming"
+    - "Atlanta"
     - "Austin"
+    - "Boston"
+    - "Charlotte"
+    - "Chicago"
+    - "Dallas"
+    - "Denver"
+    - "Detroit"
     - "Houston"
+    - "Los Angeles"
+    - "Miami"
+    - "Minneapolis"
+    - "Nashville"
+    - "New York City"
+    - "NYC"
+    - "Philadelphia"
+    - "Phoenix"
+    - "Pittsburgh"
+    - "Portland"
+    - "Raleigh"
+    - "San Diego"
+    - "San Francisco"
+    - "San Jose"
+    - "Seattle"
+    - "St. Louis"
+    - "Tampa"
+    - "Washington DC"
+    - "Washington, D.C."
 
   max_age_hours: 48
   min_match_score: 60
 
 filters:
   exclude_phrases:
+    # citizenship / clearance
     - "us citizen"
     - "u.s. citizen"
     - "citizens only"
@@ -43,6 +135,44 @@ filters:
     - "public trust clearance"
     - "polygraph"
     - "must be eligible to obtain a clearance"
+    # non-US locations
+    - "remote - mexico"
+    - "remote - canada"
+    - "remote - india"
+    - "remote - europe"
+    - "remote - latam"
+    - "remote - emea"
+    - "remote - apac"
+    - "remote - brazil"
+    - "remote - argentina"
+    - "remote - colombia"
+    - "remote - ireland"
+    - "remote - germany"
+    - "remote - united kingdom"
+    - "remote - uk"
+    - "remote, mexico"
+    - "remote, canada"
+    - "remote, india"
+    - "remote, europe"
+    - "remote, brazil"
+    - "based in mexico"
+    - "based in canada"
+    - "based in india"
+    - "based in europe"
+    - "must be located in canada"
+    - "must reside in canada"
+    - "must reside in mexico"
+    - "must reside in india"
+    - "canada only"
+    - "mexico only"
+    - "india only"
+    - "uk only"
+    - "emea only"
+    - "apac only"
+    - "eligible to work in canada"
+    - "eligible to work in mexico"
+    - "eligible to work in the uk"
+    - "eligible to work in india"
 
   positive_phrases:
     - "visa sponsorship available"
@@ -53,6 +183,8 @@ filters:
     - "we sponsor"
     - "transfer existing visa"
     - "e-verify"
+    - "aws"
+    - "azure"
 
   blacklist_companies: []
 
@@ -61,6 +193,9 @@ filters:
     - "Snowflake"
     - "Stripe"
     - "Datadog"
+    - "Netflix"
+    - "Airbnb"
+    - "Spotify"
 
 sources:
   greenhouse:
@@ -76,6 +211,16 @@ sources:
       - cloudflare
       - elastic
       - mongodb
+      - benchling
+      - twilio
+      - robinhood
+      - instacart
+      - doordash
+      - lyft
+      - pinterest
+      - squarespace
+      - wealthfront
+      - upwork
 
   lever:
     enabled: true
@@ -84,6 +229,8 @@ sources:
       - spotify
       - palantir
       - plaid
+      - ramp
+      - kraken
 
   ashby:
     enabled: true
@@ -91,6 +238,8 @@ sources:
       - notion
       - linear
       - posthog
+      - vanta
+      - anthropic
 
   remoteok:
     enabled: true
@@ -116,5 +265,5 @@ cold_email:
 
 notify:
   channel: "email"
-  min_notify_score: 70
+  min_notify_score: 60
   batch: true

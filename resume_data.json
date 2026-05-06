@@ -1,0 +1,105 @@
+{
+  "name": "Deepika T",
+  "title": "Senior Data Engineer",
+  "contact": {
+    "email": "t.deepika0711@gmail.com",
+    "phone": "+1 940-242-1401",
+    "linkedin": "",
+    "github": ""
+  },
+  "summary": [
+    "Data Engineer with 6+ years of experience building scalable and reliable data solutions across **AWS** and **Microsoft Azure** cloud platforms, including modern Lakehouse architectures with Delta Lake and Apache Iceberg.",
+    "Strong expertise in designing end-to-end data pipelines using **Apache Airflow**, **DBT**, **PySpark**, and cloud-native services that support both analytical and operational use cases.",
+    "Proven ability to enhance data performance, reliability, and availability in enterprise-scale environments through Infrastructure as Code **(Terraform/AWS CDK)** and **CI/CD** best practices.",
+    "Experienced in implementing data governance frameworks including data lineage tracking, metadata management via **AWS Glue Data Catalog** and Unity Catalog, and data quality enforcement using **DBT tests** and Great Expectations.",
+    "Skilled at working with cross-functional teams \u2014 analysts, data scientists, and business stakeholders \u2014 to deliver analytics-ready, ML-ready datasets on time.",
+    "Continuously learning emerging tools including open table formats **(Delta Lake, Apache Iceberg)**, **semantic layers**, and **LLMOps integrations**.",
+    "Comfortable operating in Agile and Scrum environments, contributing to sprint planning, backlog grooming, and technical documentation to keep cross-functional teams aligned."
+  ],
+  "skills": {
+    "Programming Languages": ["Python", "SQL"],
+    "Transformation & Modeling": ["DBT (data build tool)", "Spark SQL", "Hive", "PySpark"],
+    "Big Data & Processing": ["Apache Spark (PySpark, Spark SQL)", "Hadoop (HDFS, MapReduce)", "Databricks"],
+    "Table Formats & Lakehouse": ["Delta Lake", "Apache Iceberg", "Medallion Architecture (Bronze/Silver/Gold)"],
+    "Orchestration & Workflow": ["Apache Airflow", "AWS Step Functions", "Azure Data Factory"],
+    "Streaming & Messaging": ["Apache Kafka", "Azure Event Hubs"],
+    "Cloud Platforms": ["AWS (Lambda, S3, Glue, EMR, Redshift, RDS, Step Functions, SageMaker, CloudWatch)", "Microsoft Azure (ADF, Azure Databricks, ADLS Gen2, Event Hubs, Monitor, Log Analytics)"],
+    "Data Governance & Quality": ["AWS Glue Data Catalog", "Unity Catalog", "Data Lineage", "DBT Tests", "Great Expectations", "RBAC"],
+    "Infrastructure as Code": ["Terraform", "AWS CDK", "Azure DevOps", "GitHub Actions"],
+    "Data Warehousing & DBs": ["Amazon Redshift", "Snowflake", "SQL Server", "Amazon RDS"],
+    "AI/ML Technologies": ["AWS SageMaker", "Spark MLlib", "PyTorch"],
+    "Visualization & BI": ["Tableau", "Power BI", "SSRS"],
+    "Monitoring & DevOps": ["AWS CloudWatch", "Azure Log Analytics", "Azure DevOps", "GitHub"]
+  },
+  "experience": [
+    {
+      "company": "Highmark",
+      "location": "PA",
+      "title": "Senior Data Engineer",
+      "start": "September 2023",
+      "end": "Present",
+      "bullets": [
+        "Built a multi-layer Data Lakehouse on AWS Glue using PySpark and Delta Lake with schema enforcement and version control, reducing downstream data errors by 30%.",
+        "Designed a serverless data ingestion pipeline using AWS Lambda and S3 to collect data from APIs, databases, and flat files into a centralized data lake.",
+        "Orchestrated end-to-end data workflows using AWS Step Functions with automated data lineage tracking and schema validation through AWS Glue Data Catalog, cutting pipeline failures by 25%.",
+        "Developed reusable DBT transformation models with built-in data quality tests \u2014 including null checks, uniqueness, and referential integrity \u2014 maintaining data accuracy across datasets.",
+        "Built feature engineering pipelines to aggregate, normalize, and transform structured data for analytics and machine learning use cases integrated with AWS SageMaker.",
+        "Applied anomaly detection using Spark MLlib and statistical methods to identify data quality issues early and improve reliability of incoming data.",
+        "Processed large-scale datasets using Amazon EMR and Apache Hive to support high-volume distributed batch workloads.",
+        "Optimized Amazon Redshift query performance through distribution and sort key tuning, improving query efficiency for reporting and ML feature access by 35%.",
+        "Built Tableau dashboards connected to Redshift Spectrum to deliver near real-time operational and analytical reporting.",
+        "Enabled faster data-to-insight cycles by 40% by streamlining data pipelines and supporting ML-ready datasets, improving decision-making efficiency for business teams."
+      ],
+      "tech": ["AWS Lambda", "Amazon S3", "AWS Glue", "AWS Glue Data Catalog", "PySpark", "Spark SQL", "Delta Lake", "DBT", "Amazon EMR", "Apache Hive", "Amazon Redshift", "Snowflake", "Tableau", "Python", "SQL", "AWS Step Functions", "AWS SageMaker", "Spark MLlib", "Apache Airflow"]
+    },
+    {
+      "company": "Dell Technologies",
+      "location": "",
+      "title": "Data Engineer",
+      "start": "July 2021",
+      "end": "March 2022",
+      "bullets": [
+        "Designed and built end-to-end ETL pipelines using Azure Data Factory (ADF) to ingest data from ERP systems, CRM platforms, and flat files into a centralized data lake.",
+        "Built scalable data processing workflows using Azure Databricks and PySpark with Delta Lake, implementing a medallion architecture (raw \u2192 staging \u2192 curated) on ADLS Gen2.",
+        "Automated CI/CD pipelines and infrastructure deployments using Azure DevOps and Terraform, reducing environment provisioning time.",
+        "Implemented near real-time data ingestion using Azure Event Hubs and Apache Kafka to continuously stream transaction and order data into ADLS Gen2.",
+        "Built a governed data catalog using Databricks Unity Catalog for lineage tracking and metadata management across datasets.",
+        "Improved Databricks job runtime by 45% through partition pruning, caching, and cluster autoscaling, reducing monthly compute costs.",
+        "Integrated Snowflake as an enterprise data warehouse and optimized query performance using partitioning, clustering, and indexing, improving dashboard load times by 30%.",
+        "Enforced data security and access compliance using Azure Key Vault and Azure Active Directory with role-based access control (RBAC).",
+        "Configured pipeline monitoring and alerting using Azure Monitor and Log Analytics to enable proactive detection and resolution of data failures.",
+        "Built interactive Power BI dashboards to deliver insights into sales performance, order trends, and key operational KPIs."
+      ],
+      "tech": ["Azure Data Factory", "Azure Databricks", "Delta Lake", "Unity Catalog", "Terraform", "Apache Airflow", "Azure Event Hubs", "Apache Kafka", "ADLS Gen2", "Snowflake", "SQL Server", "Python", "PySpark", "Spark SQL", "Hive", "Hadoop", "Azure DevOps", "Azure Key Vault", "Azure AD (RBAC)", "Azure Monitor", "Log Analytics", "Power BI"]
+    },
+    {
+      "company": "Tech Mahindra",
+      "location": "",
+      "title": "Data Engineer",
+      "start": "August 2018",
+      "end": "May 2021",
+      "bullets": [
+        "Designed and built batch ETL pipelines using AWS Glue and Python to ingest and process data from enterprise databases and flat files into a centralized data lake.",
+        "Structured a layered data lake on Amazon S3 using a medallion architecture (raw, staging, curated) and registered all datasets in the AWS Glue Data Catalog for centralized metadata management and data lineage.",
+        "Built a data quality framework using SQL, Python, and DBT tests \u2014 covering schema validation, null checks, uniqueness, and referential integrity \u2014 to ensure clean and consistent data before loading into reporting layers.",
+        "Automated AWS Glue jobs and Airflow DAG deployments using Terraform, reducing manual provisioning effort by 60% and maintaining consistent environments across dev, staging, and production.",
+        "Loaded and optimized data in Amazon Redshift using distribution keys, sort keys, and query tuning, improving report query response times by 40%.",
+        "Developed and automated SSRS reports to deliver scheduled business insights, reducing manual reporting workload and improving data availability for stakeholders.",
+        "Monitored pipeline health using AWS CloudWatch and implemented error handling and retry logic to improve overall pipeline reliability and reduce failures."
+      ],
+      "tech": ["Amazon S3", "AWS Glue", "AWS Glue Data Catalog", "DBT", "Apache Airflow", "Terraform", "Amazon Redshift", "Amazon RDS", "Python", "SQL", "AWS CloudWatch", "SSRS", "Alteryx", "Tableau", "Medallion Architecture"]
+    }
+  ],
+  "education": [
+    {
+      "degree": "Master of Science in Information Science",
+      "school": "Cleveland State University",
+      "year": ""
+    }
+  ],
+  "certifications": [
+    "AWS Certified Solutions Architect \u2013 Associate (Amazon, August 2024)",
+    "Python Essentials 1 (Cisco, March 2024)",
+    "Data Analytics Essentials (Cisco, March 2024)"
+  ]
+}

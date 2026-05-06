@@ -1,0 +1,171 @@
+# Job search configuration — edit these to tune the agent
+
+search:
+  # Job title keywords (any match)
+  keywords:
+    - "data engineer"
+    - "senior data engineer"
+    - "lead data engineer"
+    - "staff data engineer"
+    - "analytics engineer"
+    - "etl engineer"
+    - "lakehouse engineer"
+    - "data platform engineer"
+
+  # Locations — add cities or "remote"
+  locations:
+    - "remote"
+    - "United States"
+    - "Texas"
+    - "Dallas"
+    - "Austin"
+    - "Houston"
+
+  # Only consider jobs posted within last N hours
+  max_age_hours: 24
+
+  # Minimum match score (0-100) from the LLM evaluator
+  min_match_score: 60
+
+filters:
+  # Reject if any of these phrases appear (case-insensitive)
+  exclude_phrases:
+    - "us citizen"
+    - "u.s. citizen"
+    - "citizens only"
+    - "citizenship required"
+    - "must be a citizen"
+    - "green card holder"
+    - "gc holder"
+    - "no sponsorship"
+    - "not able to sponsor"
+    - "unable to sponsor"
+    - "do not sponsor"
+    - "cannot sponsor"
+    - "no visa sponsorship"
+    - "active security clearance"
+    - "secret clearance"
+    - "top secret"
+    - "ts/sci"
+    - "public trust clearance"
+    - "polygraph"
+    - "must be eligible to obtain a clearance"
+
+  # Boost score if any of these appear (sponsorship-friendly signals)
+  positive_phrases:
+    - "visa sponsorship available"
+    - "h-1b sponsorship"
+    - "h1b sponsorship"
+    - "sponsor work visa"
+    - "willing to sponsor"
+    - "we sponsor"
+    - "transfer existing visa"
+    - "e-verify"
+
+  # Companies you want to skip (e.g., recruiters that spam, places you've burned out on)
+  blacklist_companies: []
+
+  # Companies to prioritize (boosts score)
+  priority_companies:
+    - "Databricks"
+    - "Snowflake"
+    - "Confluent"
+    - "Dremio"
+    - "Stripe"
+    - "Datadog"
+
+# Sources to pull from
+sources:
+  greenhouse:
+    enabled: true
+    # Add company slugs from boards.greenhouse.io/<slug>
+    # These are example tech companies that historically sponsor
+    boards:
+      - airbnb
+      - stripe
+      - databricks
+      - confluent
+      - datadog
+      - reddit
+      - dropbox
+      - asana
+      - figma
+      - gitlab
+      - hashicorp
+      - cloudflare
+      - elastic
+      - mongodb
+      - benchling
+      - rippling
+      - retool
+      - vercel
+      - anthropic
+      - openai
+
+  lever:
+    enabled: true
+    # Add company slugs from jobs.lever.co/<slug>
+    boards:
+      - netflix
+      - spotify
+      - shopify
+      - palantir
+      - plaid
+      - github
+      - mixpanel
+      - brex
+      - ramp
+      - scale
+      - chime
+
+  ashby:
+    enabled: true
+    # Add company slugs from jobs.ashbyhq.com/<slug>
+    boards:
+      - openai
+      - ramp
+      - linear
+      - notion
+      - posthog
+      - replit
+      - perplexity
+
+  remoteok:
+    enabled: true
+
+  adzuna:
+    enabled: true
+    country: us  # us, gb, etc.
+
+# Resume tailoring
+tailoring:
+  # Aggressiveness: how much the LLM should rewrite vs preserve
+  # "conservative" = reorder + minor edits only; "aggressive" = rewrite bullets to match JD
+  mode: "moderate"  # conservative | moderate | aggressive
+
+  # Maximum bullet points per role (drops weakest matches)
+  max_bullets_per_role: 7
+
+  # Always include these skills if they're in resume_data.json
+  always_include_skills:
+    - "Python"
+    - "SQL"
+    - "PySpark"
+    - "AWS"
+    - "Azure"
+
+# Cold email
+cold_email:
+  enabled: true
+  # Tone: "warm" | "direct" | "formal"
+  tone: "direct"
+  # Always end with this CTA
+  cta: "Would you have 15 minutes this week to discuss whether my background could be a fit for the team?"
+
+# Notifications
+notify:
+  channel: "email"  # email | telegram | both
+  # Only notify for jobs with score >= this
+  min_notify_score: 70
+  # Batch all jobs from a single run into one notification (vs one email per job)
+  batch: true

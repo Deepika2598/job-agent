@@ -2,9 +2,19 @@ name: Job Agent
 
 on:
   schedule:
-    # Run every 15 minutes, 24/7. Simpler and safer than trying to map EST to UTC.
-    # GitHub free-tier accounts have plenty of minutes for this.
-    - cron: "*/15 * * * *"
+    # Active hours: 7 AM – 9 PM Eastern time, year-round, DST-safe.
+    #
+    # Daylight saving makes timezone-to-UTC mapping shift by 1 hour twice a year.
+    # We schedule the UNION of both windows so the agent is correct year-round.
+    #
+    # During EDT (March–November):  7am ET = 11:00 UTC,  9pm ET = 01:00 UTC next day
+    # During EST (November–March):  7am ET = 12:00 UTC,  9pm ET = 02:00 UTC next day
+    #
+    # Union covers UTC 11:00 through 02:00 next day → hours 11..23 and 0..2 UTC.
+    # Outside the "active" season for one cron, runs simply find no new jobs and
+    # exit in seconds — they cost nothing.
+    - cron: "*/15 11-23 * * *"
+    - cron: "*/15 0-2 * * *"
   workflow_dispatch:
 
 jobs:

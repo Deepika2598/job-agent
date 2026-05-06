@@ -2,8 +2,9 @@ name: Job Agent
 
 on:
   schedule:
-    - cron: "*/15 12-23 * * *"
-    - cron: "*/15 0-1 * * *"
+    # Run every 15 minutes, 24/7. Simpler and safer than trying to map EST to UTC.
+    # GitHub free-tier accounts have plenty of minutes for this.
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 
 jobs:

@@ -16,7 +16,7 @@ import google.generativeai as genai
 
 log = logging.getLogger(__name__)
 
-MODEL = "gemini-2.0-flash"
+MODEL = "gemini-2.5-flash"
 
 EMAIL_PROMPT = """Write a cold email from a senior data engineer to a hiring manager.
 

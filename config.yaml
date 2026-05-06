@@ -211,15 +211,12 @@ sources:
       - cloudflare
       - elastic
       - mongodb
-      - benchling
       - twilio
       - robinhood
       - instacart
-      - doordash
       - lyft
       - pinterest
       - squarespace
-      - wealthfront
       - upwork
 
   lever:
@@ -229,7 +226,6 @@ sources:
       - spotify
       - palantir
       - plaid
-      - ramp
       - kraken
 
   ashby:
@@ -239,7 +235,6 @@ sources:
       - linear
       - posthog
       - vanta
-      - anthropic
 
   remoteok:
     enabled: true

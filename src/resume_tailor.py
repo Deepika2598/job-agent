@@ -15,7 +15,7 @@ import google.generativeai as genai
 
 log = logging.getLogger(__name__)
 
-MODEL = "gemini-2.0-flash"  # fast, free-tier friendly
+MODEL = "gemini-2.5-flash"  # fast, free-tier friendly
 
 SYSTEM_PROMPT = """You are an expert technical resume editor for data engineering roles.
 

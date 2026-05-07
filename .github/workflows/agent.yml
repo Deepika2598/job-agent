@@ -1,18 +1,7 @@
 name: Job Agent
 
 on:
-  schedule:
-    # Active hours: 7 AM – 9 PM Eastern time, year-round, DST-safe.
-    #
-    # Cron runs at minutes :07, :27, :47 — every 20 minutes, offset off-peak
-    # to avoid GitHub Actions queue congestion at top-of-hour boundaries.
-    #
-    # During EDT (March–November):  7am ET = 11:00 UTC,  9pm ET = 01:00 UTC next day
-    # During EST (November–March):  7am ET = 12:00 UTC,  9pm ET = 02:00 UTC next day
-    # Union covers UTC 11..23 and 0..2.
-    - cron: "7,27,47 11-23 * * *"
-    - cron: "7,27,47 0-2 * * *"
-  workflow_dispatch:
+     workflow_dispatch:
 
 jobs:
   run:

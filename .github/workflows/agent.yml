@@ -1,7 +1,16 @@
 name: Job Agent
 
 on:
-     workflow_dispatch:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Run mode (normal or summary)"
+        required: false
+        default: "normal"
+        type: choice
+        options:
+          - normal
+          - summary
 
 jobs:
   run:
@@ -27,7 +36,8 @@ jobs:
           restore-keys: |
             jobs-db-
 
-      - name: Run agent
+      - name: Run agent (normal)
+        if: inputs.mode != 'summary'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
@@ -36,9 +46,15 @@ jobs:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           NOTIFY_EMAIL: ${{ secrets.NOTIFY_EMAIL }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python -m src.main
+
+      - name: Run agent (daily summary)
+        if: inputs.mode == 'summary'
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          NOTIFY_EMAIL: ${{ secrets.NOTIFY_EMAIL }}
+        run: python -m src.main --summary
 
       - name: Upload artifacts (tailored resumes + emails)
         if: always()

@@ -1,4 +1,4 @@
-# Job search configuration
+# Job search configuration — v4, aggressive expansion + fresh-only
 
 search:
   keywords:
@@ -8,12 +8,32 @@ search:
     - "staff data engineer"
     - "principal data engineer"
     - "analytics engineer"
+    - "senior analytics engineer"
     - "etl engineer"
+    - "data pipeline engineer"
+    - "data integration engineer"
+    - "data warehouse engineer"
     - "data platform engineer"
     - "data infrastructure engineer"
+    - "data architect"
+    - "cloud data engineer"
+    - "aws data engineer"
+    - "azure data engineer"
+    - "big data engineer"
+    - "spark engineer"
+    - "databricks engineer"
+    - "snowflake engineer"
+    - "ml platform engineer"
+    - "ml infrastructure engineer"
+    - "ml data engineer"
+    - "mlops engineer"
+    - "software engineer, data"
+    - "software engineer - data"
+    - "senior software engineer, data"
+    - "senior software engineer - data"
+    - "streaming data engineer"
+    - "real-time data engineer"
 
-  # US only — onsite, hybrid, AND remote-US all welcome.
-  # Filter accepts the job if its location string contains ANY of these.
   locations:
     - "United States"
     - "USA"
@@ -29,7 +49,6 @@ search:
     - "US Remote"
     - "US-Remote"
     - "Anywhere in the US"
-    - "Anywhere - US"
     - "Alabama"
     - "Alaska"
     - "Arizona"
@@ -109,12 +128,11 @@ search:
     - "Washington DC"
     - "Washington, D.C."
 
-  max_age_hours: 48
-  min_match_score: 60
+  max_age_hours: 24
+  min_match_score: 45
 
 filters:
   exclude_phrases:
-    # citizenship / clearance
     - "us citizen"
     - "u.s. citizen"
     - "citizens only"
@@ -135,7 +153,23 @@ filters:
     - "public trust clearance"
     - "polygraph"
     - "must be eligible to obtain a clearance"
-    # non-US locations
+    - "internship"
+    - "intern position"
+    - "summer intern"
+    - "co-op"
+    - "part-time"
+    - "part time"
+    - "seasonal"
+    - "temporary"
+    - "apprenticeship"
+    - "apprentice"
+    - "entry level"
+    - "entry-level"
+    - "new grad"
+    - "new graduate"
+    - "recent graduate"
+    - "0-2 years"
+    - "0 to 2 years"
     - "remote - mexico"
     - "remote - canada"
     - "remote - india"
@@ -169,10 +203,6 @@ filters:
     - "uk only"
     - "emea only"
     - "apac only"
-    - "eligible to work in canada"
-    - "eligible to work in mexico"
-    - "eligible to work in the uk"
-    - "eligible to work in india"
 
   positive_phrases:
     - "visa sponsorship available"
@@ -188,6 +218,7 @@ filters:
 
   blacklist_companies: []
 
+  # Score-boosted companies — history of H-1B sponsorship
   priority_companies:
     - "Databricks"
     - "Snowflake"
@@ -196,11 +227,32 @@ filters:
     - "Netflix"
     - "Airbnb"
     - "Spotify"
+    - "Cognizant"
+    - "Infosys"
+    - "TCS"
+    - "Tata Consultancy"
+    - "Wipro"
+    - "HCL"
+    - "Capgemini"
+    - "Deloitte"
+    - "Accenture"
+    - "IBM"
+    - "Amazon"
+    - "Microsoft"
+    - "Google"
+    - "Meta"
+    - "Oracle"
+    - "Salesforce"
+    - "LinkedIn"
+    - "Adobe"
+    - "Nvidia"
+    - "Uber"
 
 sources:
   greenhouse:
     enabled: true
     boards:
+      # Product companies
       - airbnb
       - stripe
       - dropbox
@@ -218,6 +270,42 @@ sources:
       - pinterest
       - squarespace
       - upwork
+      - discord
+      - coinbase
+      - hex
+      - dbtlabs
+      - retool
+      - vercel
+      - render
+      - supabase
+      - replit
+      - huggingface
+      - rippling
+      - mercury
+      - segment
+      - twitch
+      - peloton
+      # Added FAANG-adjacent
+      - doordash
+      - opendoor
+      - benchling
+      - samsara
+      - affirm
+      - carta
+      - roblox
+      - anduril
+      - remitly
+      - flexport
+      - clover
+      - datarobot
+      # Added consulting / big services firms
+      - fanduel
+      - grubhub
+      - warby-parker
+      - allbirds
+      - away
+      - hims
+      - warbyparker
 
   lever:
     enabled: true
@@ -227,6 +315,15 @@ sources:
       - palantir
       - plaid
       - kraken
+      - brex
+      - chime
+      - mixpanel
+      - blockchain
+      - convoy
+      - lattice
+      - noom
+      - ridgeline
+      - sprig
 
   ashby:
     enabled: true
@@ -235,6 +332,30 @@ sources:
       - linear
       - posthog
       - vanta
+      - clay
+      - cursor
+      - perplexity
+      - openai
+      - anthropic
+      - mistral
+      - together
+      - runway
+      - character
+      - suno
+
+  workable:
+    enabled: true
+    boards:
+      - fastly
+      - twitch
+      - opsgenie
+
+  smartrecruiters:
+    enabled: true
+    boards:
+      - Bosch
+      - SalesforceCorporate
+      - McDonald's
 
   remoteok:
     enabled: true
@@ -260,5 +381,5 @@ cold_email:
 
 notify:
   channel: "email"
-  min_notify_score: 60
+  min_notify_score: 45
   batch: true

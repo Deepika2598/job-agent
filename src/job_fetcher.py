@@ -1,11 +1,6 @@
 """Fetches jobs from multiple free sources.
 
-Sources used (all free, all live):
-- Greenhouse: https://boards-api.greenhouse.io/v1/boards/<board>/jobs
-- Lever: https://api.lever.co/v0/postings/<board>?mode=json
-- Ashby: https://api.ashbyhq.com/posting-api/job-board/<board>
-- RemoteOK: https://remoteok.com/api
-- Adzuna: https://api.adzuna.com/v1/api/jobs/<country>/search
+Sources: Greenhouse, Lever, Ashby, Workable, SmartRecruiters, RemoteOK, Adzuna.
 """
 import os
 import re
@@ -22,16 +17,13 @@ TIMEOUT = 20
 
 
 def _id(source: str, key: str) -> str:
-    """Stable hashed job ID across sources."""
     return f"{source}:{hashlib.md5(key.encode()).hexdigest()[:16]}"
 
 
 def _within_window(iso_str: str, max_age_hours: int) -> bool:
-    """Return True if posted within the freshness window."""
     if not iso_str:
-        return True  # if unknown, don't drop
+        return True
     try:
-        # tolerate trailing Z, missing tz, etc.
         s = iso_str.replace("Z", "+00:00")
         dt = datetime.fromisoformat(s)
         if dt.tzinfo is None:
@@ -42,7 +34,7 @@ def _within_window(iso_str: str, max_age_hours: int) -> bool:
         return True
 
 
-def fetch_greenhouse(boards: list[str], max_age_hours: int) -> Iterator[dict]:
+def fetch_greenhouse(boards: list, max_age_hours: int) -> Iterator[dict]:
     for board in boards:
         url = f"https://boards-api.greenhouse.io/v1/boards/{board}/jobs?content=true"
         try:
@@ -55,7 +47,6 @@ def fetch_greenhouse(boards: list[str], max_age_hours: int) -> Iterator[dict]:
                 posted = j.get("updated_at") or j.get("first_published")
                 if not _within_window(posted, max_age_hours):
                     continue
-                # Greenhouse content is HTML — strip tags later in filter step
                 yield {
                     "id": _id("greenhouse", str(j["id"])),
                     "source": "greenhouse",
@@ -64,13 +55,13 @@ def fetch_greenhouse(boards: list[str], max_age_hours: int) -> Iterator[dict]:
                     "location": (j.get("location") or {}).get("name", ""),
                     "url": j.get("absolute_url", ""),
                     "posted_at": posted or "",
-                    "description": j.get("content", ""),  # HTML
+                    "description": j.get("content", ""),
                 }
         except Exception as e:
             log.warning(f"Greenhouse {board} failed: {e}")
 
 
-def fetch_lever(boards: list[str], max_age_hours: int) -> Iterator[dict]:
+def fetch_lever(boards: list, max_age_hours: int) -> Iterator[dict]:
     for board in boards:
         url = f"https://api.lever.co/v0/postings/{board}?mode=json"
         try:
@@ -100,7 +91,7 @@ def fetch_lever(boards: list[str], max_age_hours: int) -> Iterator[dict]:
             log.warning(f"Lever {board} failed: {e}")
 
 
-def fetch_ashby(boards: list[str], max_age_hours: int) -> Iterator[dict]:
+def fetch_ashby(boards: list, max_age_hours: int) -> Iterator[dict]:
     for board in boards:
         url = f"https://api.ashbyhq.com/posting-api/job-board/{board}?includeCompensation=true"
         try:
@@ -116,7 +107,7 @@ def fetch_ashby(boards: list[str], max_age_hours: int) -> Iterator[dict]:
                 yield {
                     "id": _id("ashby", j.get("id", "")),
                     "source": "ashby",
-                    "company": (data.get("apiVersion") and board) or board,
+                    "company": board,
                     "title": j.get("title", ""),
                     "location": j.get("location", ""),
                     "url": j.get("jobUrl", ""),
@@ -127,8 +118,71 @@ def fetch_ashby(boards: list[str], max_age_hours: int) -> Iterator[dict]:
             log.warning(f"Ashby {board} failed: {e}")
 
 
-def fetch_remoteok(keywords: list[str], max_age_hours: int) -> Iterator[dict]:
-    """RemoteOK has a single feed, we filter client-side by keyword."""
+def fetch_workable(boards: list, max_age_hours: int) -> Iterator[dict]:
+    """Workable public API — https://apply.workable.com/api/v3/accounts/<slug>/jobs"""
+    for board in boards:
+        url = f"https://apply.workable.com/api/v3/accounts/{board}/jobs"
+        try:
+            r = requests.get(url, headers={"User-Agent": USER_AGENT}, timeout=TIMEOUT)
+            if r.status_code != 200:
+                log.warning(f"Workable {board}: HTTP {r.status_code}")
+                continue
+            data = r.json()
+            for j in data.get("results", []):
+                posted = j.get("published_on") or j.get("created_at")
+                if not _within_window(posted, max_age_hours):
+                    continue
+                loc = j.get("location", {}) or {}
+                loc_str = ", ".join(filter(None, [
+                    loc.get("city"), loc.get("region"), loc.get("country")
+                ]))
+                yield {
+                    "id": _id("workable", str(j.get("id", j.get("shortcode", "")))),
+                    "source": "workable",
+                    "company": board.replace("-", " ").title(),
+                    "title": j.get("title", ""),
+                    "location": loc_str,
+                    "url": j.get("url", "") or f"https://apply.workable.com/{board}/j/{j.get('shortcode','')}/",
+                    "posted_at": posted or "",
+                    "description": j.get("description", "") or "",
+                }
+        except Exception as e:
+            log.warning(f"Workable {board} failed: {e}")
+
+
+def fetch_smartrecruiters(boards: list, max_age_hours: int) -> Iterator[dict]:
+    """SmartRecruiters public postings API."""
+    for board in boards:
+        url = f"https://api.smartrecruiters.com/v1/companies/{board}/postings"
+        try:
+            r = requests.get(url, headers={"User-Agent": USER_AGENT}, timeout=TIMEOUT)
+            if r.status_code != 200:
+                log.warning(f"SmartRecruiters {board}: HTTP {r.status_code}")
+                continue
+            data = r.json()
+            for j in data.get("content", []):
+                posted = j.get("releasedDate") or j.get("createdOn")
+                if not _within_window(posted, max_age_hours):
+                    continue
+                loc = j.get("location", {}) or {}
+                loc_str = ", ".join(filter(None, [
+                    loc.get("city"), loc.get("region"), loc.get("country")
+                ]))
+                yield {
+                    "id": _id("smartrecruiters", str(j.get("id", ""))),
+                    "source": "smartrecruiters",
+                    "company": board,
+                    "title": j.get("name", ""),
+                    "location": loc_str,
+                    "url": f"https://jobs.smartrecruiters.com/{board}/{j.get('id','')}",
+                    "posted_at": posted or "",
+                    "description": (j.get("jobAd", {}) or {}).get("sections", {}).get("jobDescription", {}).get("text", ""),
+                }
+        except Exception as e:
+            log.warning(f"SmartRecruiters {board} failed: {e}")
+
+
+def fetch_remoteok(keywords: list, max_age_hours: int) -> Iterator[dict]:
     url = "https://remoteok.com/api"
     try:
         r = requests.get(url, headers={"User-Agent": USER_AGENT}, timeout=TIMEOUT)
@@ -139,7 +193,7 @@ def fetch_remoteok(keywords: list[str], max_age_hours: int) -> Iterator[dict]:
         kws = [k.lower() for k in keywords]
         for j in data:
             if not isinstance(j, dict) or not j.get("position"):
-                continue  # skip metadata entry
+                continue
             title = j.get("position", "").lower()
             if not any(k in title for k in kws):
                 continue
@@ -160,14 +214,13 @@ def fetch_remoteok(keywords: list[str], max_age_hours: int) -> Iterator[dict]:
         log.warning(f"RemoteOK failed: {e}")
 
 
-def fetch_adzuna(keywords: list[str], country: str, max_age_hours: int) -> Iterator[dict]:
+def fetch_adzuna(keywords: list, country: str, max_age_hours: int) -> Iterator[dict]:
     app_id = os.getenv("ADZUNA_APP_ID")
     app_key = os.getenv("ADZUNA_API_KEY")
     if not app_id or not app_key:
         log.info("Adzuna keys not set, skipping")
         return
     max_days_old = max(1, max_age_hours // 24 + 1)
-    # Combine top keywords into one OR query
     what_or = " ".join(keywords[:3])
     url = f"https://api.adzuna.com/v1/api/jobs/{country}/search/1"
     params = {
@@ -195,25 +248,27 @@ def fetch_adzuna(keywords: list[str], country: str, max_age_hours: int) -> Itera
         log.warning(f"Adzuna failed: {e}")
 
 
-def fetch_all(config: dict) -> list[dict]:
-    """Run every enabled source, return aggregated list."""
+def fetch_all(config: dict) -> list:
     keywords = config["search"]["keywords"]
     max_age = config["search"]["max_age_hours"]
     sources = config["sources"]
 
-    all_jobs: list[dict] = []
+    all_jobs = []
     if sources.get("greenhouse", {}).get("enabled"):
         all_jobs += list(fetch_greenhouse(sources["greenhouse"]["boards"], max_age))
     if sources.get("lever", {}).get("enabled"):
         all_jobs += list(fetch_lever(sources["lever"]["boards"], max_age))
     if sources.get("ashby", {}).get("enabled"):
         all_jobs += list(fetch_ashby(sources["ashby"]["boards"], max_age))
+    if sources.get("workable", {}).get("enabled"):
+        all_jobs += list(fetch_workable(sources["workable"]["boards"], max_age))
+    if sources.get("smartrecruiters", {}).get("enabled"):
+        all_jobs += list(fetch_smartrecruiters(sources["smartrecruiters"]["boards"], max_age))
     if sources.get("remoteok", {}).get("enabled"):
         all_jobs += list(fetch_remoteok(keywords, max_age))
     if sources.get("adzuna", {}).get("enabled"):
         all_jobs += list(fetch_adzuna(keywords, sources["adzuna"].get("country", "us"), max_age))
 
-    # Strip HTML from descriptions for cleaner downstream processing
     for j in all_jobs:
         j["description"] = _clean_html(j.get("description", ""))
 
@@ -224,10 +279,8 @@ def fetch_all(config: dict) -> list[dict]:
 def _clean_html(html: str) -> str:
     if not html:
         return ""
-    # cheap strip — good enough for filter / LLM input
     text = re.sub(r"<[^>]+>", " ", html)
     text = re.sub(r"\s+", " ", text)
-    # Decode common entities
     for k, v in [("&amp;", "&"), ("&lt;", "<"), ("&gt;", ">"),
                  ("&nbsp;", " "), ("&#39;", "'"), ("&quot;", '"')]:
         text = text.replace(k, v)
